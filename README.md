@@ -1,12 +1,6 @@
 # Data_Course_HAUTThis README file contains information about my uploaded assignments
 
 
-jhvkuyftjyfgjhgb kyufjytd
+I love Lucy!!!
 
-Ooorah
-
-
-https://www.scheels.com/
-
-
-I love Lucy
+Bailey is a good girl!!!
