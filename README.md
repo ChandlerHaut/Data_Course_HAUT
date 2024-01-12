@@ -2,6 +2,5 @@
 
 Dad Joke:
 
-I am worried for the calendar.
-
-Its days are numbered. 99
+I am worried for the calendar....
+Its days are numbered.
