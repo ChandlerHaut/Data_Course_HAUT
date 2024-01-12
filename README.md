@@ -1,7 +1,6 @@
 # Data_Course_HAUTThis README file contains information about my uploaded assignments
 
+Dad Joke:
 
-
-yee yee
-
-
+I am worried for the calendar.
+Its days are numbered. 
