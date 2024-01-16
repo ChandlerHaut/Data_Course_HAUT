@@ -32,12 +32,9 @@ print(readLines(i, n=1))
 }
 
 #Task 10 : Do the same thing for all files that end in “.csv”
-for (i in csv_files) {
-  print(readLines(i, n=1))
-}
-
-
 csv_files <- list.files(path = "Data", pattern = ".csv", recursive = TRUE,full.names = TRUE)
+
 for (i in csv_files) {
   print(readLines(i, n=1))
 }
+
