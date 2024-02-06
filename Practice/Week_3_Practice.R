@@ -116,7 +116,11 @@ penguins %>%
 penguins %>% 
   filter(body_mass_g > 5000) %>% 
   group_by(sex) %>% 
-  summarize(max_fattie = max(body_mass_g), N = n())
+  summarize(max_fattie = max(body_mass_g), N = n()) %>% 
+  ggplot(data = x,mapping = aes(x= bill_depth_mm, y =fatstat)) +
+  geom_point(stat = "identity", fill = "blue")
+
+
 
 penguins %>% #mutate is for making new columns
   mutate(fattie = body_mass_g > 5000)
@@ -139,14 +143,35 @@ x %>%
     theme_dark()+
   theme(axis.text = element_text(angle = 180, face = 'italic'))
 
+names(penguins)
+ggplot(penguins,mapping = aes(x = flipper_length_mm, y = body_mass_g, 
+                              color = species,alpha=bill_depth_mm)) +
+  # geom_col()
+  geom_path(aes(group=species)) +
+  stat_ellipse() +
+  geom_point(aes(color=sex)) +
+  geom_polygon()+
+  geom_hex() +
+  geom_bin2d() +
+  geom_boxplot() +
+  geom_hline(yintercept = 4500,linewidth =25, color = 'magenta',
+             linetype='1121',alpha=.25) +
+  geom_point(color='yellow',aes(alpha=bill_depth_mm)) +
+  theme(axis.title = element_text(face = 'italic',size = 12, angle = 30),
+       legend.background = element_rect(fill='hotpink',color = 'blue',
+                                        linewidth = 5))
   
 
+library(ggimage)  
+yes
 
-
-
-
-
-
+names(x)
+ggplot(data = x, aes(x = bill_length_mm, y = flipper_length_mm))+
+  geom_point(stat = "identity", position = "dodge") +
+  geom_curve(position = "identity", curvature = .25, 
+             angle = 20, mapping = aes(xend = 55, yend = 220, 
+                                       color = "blue"),
+             position_dodge(width = 2)) 
 
 
 
