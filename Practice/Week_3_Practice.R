@@ -165,8 +165,8 @@ ggplot(penguins,mapping = aes(x = flipper_length_mm, y = body_mass_g,
 library(ggimage)  
 yes
 
-names(x)
-ggplot(data = x, aes(x = bill_length_mm, y = flipper_length_mm))+
+x %>% 
+ggplot(aes(x = bill_length_mm, y = flipper_length_mm))+
   geom_point(stat = "identity", position = "dodge") +
   geom_curve(position = "identity", curvature = .25, 
              angle = 20, mapping = aes(xend = 55, yend = 220, 
@@ -174,13 +174,52 @@ ggplot(data = x, aes(x = bill_length_mm, y = flipper_length_mm))+
              position_dodge(width = 2)) 
 
 
+library(ggimage)  
+library(patchwork)
+
+(Ugly + p1)/p2
+
+
+Ugly <- 
+x %>% 
+  filter(!is.na(sex)) %>% 
+ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")+
+  geom_path(aes(color = sex))+
+  geom_curve(position = "identity", curvature = .25, 
+             angle = 20, mapping = aes(xend = 0, yend = 220)) +
+  geom_image(aes(image = "./Practice/eTicketKJNRKY 1.jpeg")) +
+  labs(y = "MachoMan", x ="RandySavage",caption = "OOOOOHHHHH YEAHHHHHH", tag = "CREAM OF THE CROP")+
+  theme(aspect.ratio = .4,axis.title = element_text(colour = "pink", face = "bold", angle = 180))+
+  facet_wrap(~year, scales = "free", labeller = labeller(year = "Cream"), strip.position = "bottom")+
+  geom_image(aes(image = "./Practice/Dragonborn.jpeg",x=40,y=220), 
+             asp = 10, angle = 180)
+
+
+x %>% 
+  filter(!is.na(sex)) %>% 
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm))+
+  geom_path(aes(color = sex))+
+  geom_image(aes(image = "./Practice/Dragonborn.jpeg",x=40,y=220), 
+             asp = 10, angle = 180)
 
 
 
 
+p3 <- (Ugly + p1)/p2
+  
+  
+  ggbackground(Ugly,"./Practice/macho-man-randy-savage-1_crop_north.jpg")
+
+p1 <- 
+  x %>% 
+  filter(!is.na(sex)) %>% 
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")
 
 
-
+p2 <- 
+  x %>% 
+  filter(!is.na(sex)) %>% 
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")
 
 
 

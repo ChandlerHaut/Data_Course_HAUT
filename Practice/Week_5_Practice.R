@@ -1,37 +1,66 @@
+# Week 5
+
 library(tidyverse)
+library(ggimage)
+library(gganimate)
+library(patchwork) # stick plots together
+
+library(gapminder)
+
+# More plotting baby
+
+df <- gapminder
+
+p <- 
+df %>% 
+  #filter(lifeExp > 77) %>% 
+  ggplot(aes(x=year, y = lifeExp))+
+  geom_point(aes(size = pop)) +
+  #facet_wrap(~continent, scales = 'free') +
+  theme(axis.text.x  = element_text(angle = 90, size = 5))
 
 
-bat <- 
-  read_csv('./Data/R1_NABat_VettedObservations_NWRS2022.csv')
+p.dark <- 
+p + 
+  theme_dark()+
+  facet_wrap(~continent)
 
-bat %>%
-  ggplot(aes(x= CommonName, y= RefugeName))+
-  geom_point(aes(color = confirmed)) +
-  theme(axis.text.x  = element_text(angle = 90))
+(p + p.dark) / p.dark + plot_annotation("YeeYee") +
+  patchwork::plot_layout(guides = 'collect')
+ 
+p /p.dark + plot_annotation("YeeYee")
+
+df$year %>% range
+
+p3 <- 
+  ggplot(df,
+         aes(x=gdpPercap, y = lifeExp, color = continent))+
+  geom_point(aes(size = pop)) +
+  geom_text(aes(label=mycountries))
+
+mycountries <- 
+c("Venezuela", "Rwanda", "Nepal", "Iraq", "Afghanistan", "United States")
+
+df <- 
+df %>% 
+  mutate(mycountries = case_when(country %in% mycountries ~ country)) #This is your friend
+  
 
 
-Abat <- 
-bat %>% 
-  filter(substr(RefugeName, 1, 1) =='A') 
+p3 +
+  transition_time(time = year) +
+  labs(title = 'Year:{frame_time}') 
+
+anim_save("./Practice/gapminder_animation.gif")
+ggsave("./Practice/plot_example.png", plot = p3, width = 6,height = 6, dpi = 200) 
+# dpi is resolution, 300 is min for printing
 
 
 
-Abat %>% 
-ggplot(aes(x= CommonName))+
-  geom_bar() +
-  facet_wrap(~ObservationDate)+
-  theme(axis.text.x  = element_text(angle = 90))
 
 
-                          
 
-unique(stringr::str_to_title(iris$Species))
-Abat %>% 
-  stringr:: str_to_title() %>% 
-  unique()
 
-max(round(iris$Sepal.Length),0)
 
-mean(abs(rnorm(100,0,5)))
-median(round(seq(1,100,0.01),1))
+
 
