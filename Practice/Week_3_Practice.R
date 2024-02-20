@@ -173,9 +173,15 @@ ggplot(aes(x = bill_length_mm, y = flipper_length_mm))+
                                        color = "blue"),
              position_dodge(width = 2)) 
 
-
+library(tidyverse)
+library(palmerpenguins) 
 library(ggimage)  
 library(patchwork)
+
+x <- 
+  penguins %>% # case_when only works in mutate
+  mutate(fatstat = case_when(body_mass_g > 5000 ~ "fattie", 
+                             body_mass_g <= 5000 ~ "skinny"))
 
 (Ugly + p1)/p2
 
@@ -189,39 +195,74 @@ ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")+
              angle = 20, mapping = aes(xend = 0, yend = 220)) +
   geom_image(aes(image = "./Practice/eTicketKJNRKY 1.jpeg")) +
   labs(y = "MachoMan", x ="RandySavage",caption = "OOOOOHHHHH YEAHHHHHH", tag = "CREAM OF THE CROP")+
+  theme(axis.text = element_text(color = "purple"),  # Adjusting axis text color
+        axis.title = element_text(color = "blue"),  # Adjusting axis title color
+        plot.title = element_text(color = "green"), # Adjusting plot title color
+        plot.caption = element_text(color = "red"))+
   theme(aspect.ratio = .4,axis.title = element_text(colour = "pink", face = "bold", angle = 180))+
   facet_wrap(~year, scales = "free", labeller = labeller(year = "Cream"), strip.position = "bottom")+
-  geom_image(aes(image = "./Practice/Dragonborn.jpeg",x=40,y=220), 
-             asp = 10, angle = 180)
+  geom_image(aes(image = "./Practice/Dragonborn.jpeg",x=0,y=220), 
+             asp = 10, angle = 180) +
+  guides(color = FALSE) +
+  scale_y_reverse()
 
 
+
+#Practice
 x %>% 
   filter(!is.na(sex)) %>% 
   ggplot(aes(x = bill_length_mm, y = flipper_length_mm))+
   geom_path(aes(color = sex))+
-  geom_image(aes(image = "./Practice/Dragonborn.jpeg",x=40,y=220), 
-             asp = 10, angle = 180)
-
-
-
-
-p3 <- (Ugly + p1)/p2
+  theme(axis.text = element_text(color = "purple"),  # Adjusting axis text color
+        axis.title = element_text(color = "blue"),  # Adjusting axis title color
+        plot.title = element_text(color = "green"), # Adjusting plot title color
+        plot.caption = element_text(color = "red")) +
+  labs(y = "MachoMan", x ="RandySavage",
+       caption = "OOOOOHHHHH YEAHHHHHH", 
+       tag = "CREAM OF THE CROP")+
+  guides(color = FALSE) 
+ # Adjusting title color
   
-  
-  ggbackground(Ugly,"./Practice/macho-man-randy-savage-1_crop_north.jpg")
+p4 <- ggbackground(p10,"./Practice/macho-man-randy-savage-1_crop_north.jpg")
 
-p1 <- 
-  x %>% 
-  filter(!is.na(sex)) %>% 
-  ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")
+
+
+
+final <- ggbackground(p5,"./Practice/macho-man-randy-savage-1_crop_north.jpg")
+  
+Yee <- "Final_Ugly_Plot.png"
+
+ggsave(Yee,final, width = 10, height = 6, dpi = 500)
 
 
 p2 <- 
   x %>% 
   filter(!is.na(sex)) %>% 
-  ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")+
+  labs(x ="",y="")+
+  theme(aspect.ratio = 0)
 
+p10 <- 
+  x %>% 
+  filter(!is.na)
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")+
+  geom_path(aes(color = sex))+
+  geom_curve(position = "identity", curvature = .25, 
+             angle = 20, mapping = aes(xend = 0, yend = 220)) +
+  geom_image(aes(image = "./Practice/eTicketKJNRKY 1.jpeg")) +
+  labs(y = "MachoMan", x ="RandySavage",caption = "OOOOOHHHHH YEAHHHHHH", tag = "CREAM OF THE CROP")+
+  theme(axis.text = element_text(color = "purple"),  
+        axis.title = element_text(color = "blue"),  
+        plot.title = element_text(color = "green"), 
+        plot.caption = element_text(color = "red"))+
+  theme(aspect.ratio = .4,axis.title = element_text(colour = "pink", face = "bold", angle = 180))+
+  facet_wrap(~year, scales = "free", labeller = labeller(year = "Cream"), strip.position = "bottom")+
+  geom_image(aes(image = "./Practice/Dragonborn.jpeg",x=0,y=220), 
+             asp = 10) +
+  guides(color = "none") +
+  scale_y_reverse()
 
+p5 <- p10 + p2
 
 
 
