@@ -239,8 +239,7 @@ p2 <-
   x %>% 
   filter(!is.na(sex)) %>% 
   ggplot(aes(x = bill_length_mm, y = flipper_length_mm), scale = "free")+
-  labs(x ="",y="")+
-  theme(aspect.ratio = 0)
+ 
 
 p10 <- 
   x %>% 

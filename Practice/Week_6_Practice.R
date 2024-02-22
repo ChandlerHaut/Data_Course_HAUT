@@ -104,3 +104,56 @@ View(clean)
  
 # Download the Worst Data Sheet off of the class site and play around with it
  
+ 
+ library(readxl)
+dat <-  read_xlsx("./Data/messy_bp.xlsx", skip = 3) 
+
+names(bp)
+
+n.vistis <- 
+  bp %>% 
+  select(starts_with("BP")) %>% 
+  length()
+
+which(grepl("^BP", names(bp)))
+
+names(bp)[which(grepl("^BP", names(bp)))] <- paste0("visit",1:n.vistis)
+
+
+
+bp <- 
+  dat %>% 
+  select(-starts_with("HR"))
+
+
+hr <- 
+  dat %>% 
+  select(-starts_with("BP"))
+
+bp <- 
+  bp %>% 
+  pivot_longer(starts_with("visit"),
+               names_to = "visit",
+               values_to = "bp",
+               names_prefix = "visit",
+               names_transform = as.numeric) %>% # Turns visit1 = 1 and so on
+  separate(bp, into = c("systolic","diastolic"))
+
+hr <- hr %>% 
+  pivot_longer(starts_with("visit"),
+               names_to = "visit",
+               values_to = "hr",
+               names_prefix = "visit",
+               names_transform = as.numeric)
+n.vistis <- 
+  hr %>% 
+  select(starts_with("HR")) %>% 
+  length()
+
+which(grepl("^HR", names(hr)))
+
+names(hr)[which(grepl("^HR", names(hr)))] <- paste0("visit",1:n.vistis)
+
+names(hr)
+
+# Under Data, Datasaurus is a good one to look at as well as Juniper Oils. 
