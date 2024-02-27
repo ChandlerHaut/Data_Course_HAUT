@@ -2,7 +2,10 @@
 
 library(tidyverse)
 library(janitor)
+library(ggplot2)
 library(gganimate)
+
+
 
 dat <- read_csv("../../Data/BioLog_Plate_Data.csv") 
 
@@ -17,6 +20,7 @@ x <-
   mutate(time = case_when(time == "hr_24"~24,
                           time == "hr_48"~48,
                           time == "hr_144"~144))
+
 
 # 2. Creates a new column specifying whether a sample is from soil or water
 
@@ -43,16 +47,11 @@ df_tidy %>%
 # This plot is just showing values for the substrate “Itaconic Acid”
 
 df_tidy %>% 
-  filter(dilution == 0.1, substrate == "Itaconic Acid") %>% 
-  mutate(sw = as.factor(sw)) %>% 
-  ggplot(aes(x = time, y = absorbance, color = sw))+
-  geom_smooth(method = "loess", se = FALSE)+
-  gganimate()+
-  facet_wrap(~substrate)
-
-
-
-
+  filter(substrate == "Itaconic Acid") %>% 
+  ggplot(aes(x = time, y = absorbance, color = sample_id)+
+  geom_line()+
+  facet_wrap(~dilution)+
+  transition_reveal(time)
 
 
 
