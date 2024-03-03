@@ -3,6 +3,7 @@ library(janitor)
 library(stringr)
 library(easystats)
 library(MASS)
+library(modelr)
 
 
 
@@ -54,6 +55,7 @@ mod3 <- glm(data = df_tidy, formula = U5MR~year*Continent)
 
 #8. Compare the three models with respect to their performance
 compare_performance(mod1, mod2,mod3) %>% plot
+
 # Based off the compare_performance, mod3 is the best model of these three.  
 
 # 9. Plot the 3 models’ predictions like so: (10 pts)
@@ -63,32 +65,29 @@ df_tidy$mod2 <- predict(mod2, df_tidy)
 df_tidy$mod3 <- predict(mod3, df_tidy)
 
 
+Predicted <- 
 df_tidy %>% 
   pivot_longer(starts_with("mod"),
                values_to = "Predicted_U5MR") %>% 
   ggplot(aes(x=year, y = Predicted_U5MR, color = Continent))+
   geom_smooth(method = "glm")+
-  facet_wrap(~name)
+  facet_wrap(~name)+
+  labs(title = "Model Predictions")
+
 
 
 #10. BONUS - Using your preferred model, predict what the U5MR would be for 
 # Ecuador in the year 2020. The real value for Ecuador for 2020 was 
 # 13 under-5 deaths per 1000 live births. How far off was your model prediction???
 
-Country_Name <- 
-df_tidy %>% 
-  mutate(CountryName = factor(CountryName))
+mod4 <- glm(U5MR ~ year, data = df_tidy)
 
+Ecuador_2020 <- data.frame(year = 2020, CountryName = "Ecuador")
 
-mod4 <- glm(data = Country_Name, formula = U5MR~year*CountryName)
+Pred_Ecuador <- predict(mod4, newdata = Ecuador_2020)
 
-predict(mod4, data.frame(CountryName = "Ecuador"))
-
-
-
-
-
-
+# Model Prediction Reality
+# mod4  11.44224    13     Not to far off but below the reality. 
 
 
 
