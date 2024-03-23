@@ -1,0 +1,21 @@
+Are any of your predicted response values from your best model scientifically meaningless? Explain.
+No, because they all fall within the parameters of the existing data.
+
+In your plots, did you find any non-linear relationships? Do a bit of research online and give a link to at least one resource explaining how to deal with modeling non-linear relationships in R.
+Yes. https://www.datacamp.com/tutorial/introduction-to-non-linear-model-and-insights-using-r
+
+Write the code you would use to model the data found in “/Data/non_linear_relationship.csv” with a linear model (there are a few ways of doing this)
+
+nf <- read.csv("./non_linear_relationship.csv")
+
+plot1 <- 
+nf %>% 
+  ggplot()+
+  geom_boxplot(aes(y=response))
+
+plot2 <- 
+nf %>% 
+  ggplot()+
+  geom_boxplot(aes(y=predictor))
+
+plot1 + plot2

@@ -4,7 +4,9 @@ library(tidyverse)
 library(modelr)
 library(easystats)
 library(MASS)
-
+library(caret)
+library(broom)
+library(modelr)
 
 names(mpg)
 
@@ -85,8 +87,69 @@ mpg %>% # mod3
   geom_smooth(method = "glm")
 
 
+mod1 <- 
+  mpg %>% 
+  glm(data = ., 
+      formula = cty~displ+drv) #this is training or fitting the model to the data
+broom::tidy(mod1)   #turns model output into a data frame
+#kableExtra used to make good reports, broom makes it possible
+add_predictions(mpg,mod1) %>% #this does the prediction and adds it for you. 
+  ggplot(aes(x=pred, y=cty)) +
+  geom_point()
+
+add_residuals(mpg,mod1) %>%  
+  ggplot(aes(x=resid, y=cty)) +
+  geom_point()
+
+#Cross Validation: testing a model on new data (that data needs to have actual answers)
+
+mpg$drv %>% table()
+
+id <- caret::createDataPartition(mpg$cty,p = .8, list = FALSE)
+train <-  mpg[id,] #TRIANING SET
+test <- mpg[-id,] #TESTING SET
+
+# Trian model on training set
+
+mod2 <- glm(data = train, 
+            formula = mod1$formula) #use same formula from mod1
+
+add_predictions(test,mod2) %>% 
+  mutate(error = abs(pred - cty)) %>% 
+  pluck("error") %>% 
+  summary() # This is the real test of the model by looking at the MEAN
+
+add_predictions(mpg,mod1) %>% 
+  mutate(error = abs(pred - cty)) %>% 
+  pluck("error") %>% 
+  summary()
 
 
+df <- iris
+library(vegan)
+iris %>% 
+  ggplot(aes(x=Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point()+
+  stat_ellipse()
+
+fl <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
 
 
+mat <- 
+  iris %>% 
+  select(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>% 
+  as.matrix()
+
+adonis2(mat ~ iris$Species)
+
+mds <-  metaMDS(mat)
+data.frame(Species = iris$Species,
+           med1=mds$points[,1],
+           mds2 = mds$points[,2]) %>% 
+  ggplot(aes(x=mds1, y=mds2, color = species))+
+  geom_point()+
+  stat_ellipse()
+
+kmeans() #finds the best centers of the vectors, but you need to tell it how many
+# look up the tidy clust package
 
