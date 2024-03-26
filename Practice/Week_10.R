@@ -45,7 +45,7 @@ preds %>%
 "flipper_length_mm" "body_mass_g"
 
 
-dat <- read_csv("./Data/GradSchool_Admissions.csv")
+dat <- read_csv("./GradSchool_Admissions.csv")
 str(dat)
 
 mod3 <- 

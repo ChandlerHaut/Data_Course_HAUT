@@ -1,0 +1,83 @@
+---
+title: "Assignment 9"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE, message = FALSE)
+```
+
+The packages I used for this assignmnet. 
+```{r}
+library(tidyverse)
+library(modelr)
+library(easystats)
+library(GGally)
+```
+
+
+
+```{r, echo=FALSE}
+df <- read_csv("./GradSchool_Admissions.csv")
+```
+
+Taking a look at the data we have 3 variables that could affect admit. 
+```{r}
+glimpse(df)
+df %>% 
+  ggpairs()
+```
+Our best correlation is between gpa and gre but I want to take a look at all the variables.  
+
+
+Lets do some modeling....
+```{r}
+mod1 <- glm(data = df, formula = as.logical(admit) ~ gre + rank)
+mod2 <- glm(data = df, formula = as.logical(admit) ~ gre * gpa)
+full_mod <- glm(data = df, formula = as.logical(admit) ~ gre * gpa * rank)
+
+compare_performance(mod1,mod2,full_mod)
+```
+
+Makes sense that full_mod is the best model but I still like to run the stepAIC.
+
+```{r, results='hide'}
+step <- MASS::stepAIC(full_mod)
+mod3 <- glm(data = df, formula = step$formula)
+
+```
+```{r}
+compare_performance(mod1,mod2,full_mod, mod3, rank = TRUE)
+```
+Mod3 has the best performance score so I will just run with that.
+
+
+Plotting the data. 
+
+```{r}
+df %>% 
+  gather_predictions(mod3) %>% 
+  ggplot(aes(x=gpa, y = pred, color = factor(rank)))+
+  geom_point()+
+  geom_smooth(method = "glm")
+```
+
+```{r}
+df %>% 
+  gather_predictions(mod3) %>% 
+  ggplot(aes(x=gre, y = pred, color = factor(rank)))+
+  geom_point()+
+  geom_smooth(method = "glm")
+```  
+
+**Conclusion**  
+
+Overall the better your gre and gpa, the better chance you have at getting accepted into grap shcool. Also the rank of your school is a factor on your acceptance. I am now so excited to start applying.  
+
+
+
+
+
+
+
+
